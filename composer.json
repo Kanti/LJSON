@@ -1,0 +1,15 @@
+{
+    "name": "kanti/ljson",
+    "authors": [
+        {
+            "name": "Kanti",
+            "email": "git@kanti.de"
+        }
+    ],
+    "autoload":{
+        "psr-4": {
+            "Kanti\\": "./"
+        }
+    },
+    "require": {}
+}
