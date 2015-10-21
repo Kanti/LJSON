@@ -5,11 +5,9 @@ namespace Kanti;
 class Parameter
 {
     protected $result = '';
-    protected $LJson = null;
 
-    public function __construct($result, LJSON $LJson)
+    public function __construct($result)
     {
-        $this->LJson = $LJson;
         $this->result = $result;
     }
 
@@ -18,7 +16,7 @@ class Parameter
      */
     public function __invoke()
     {
-        return new self($this->result . '(' . implode(',', array_map([$this->LJson, "stringify"], func_get_args())) . ')', $this->LJson);
+        return new self($this->result . '(' . implode(',', array_map([LJSON::class, "stringify"], func_get_args())) . ')');
     }
 
     public function __toString()

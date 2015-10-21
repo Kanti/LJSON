@@ -12,19 +12,25 @@ class LJSON
      * @return string
      * @throws \Exception
      */
-    public function stringify($value)
+    public static function stringify($value)
     {
         if (is_null($value) || is_bool($value) || is_int($value) || is_float($value) || is_double($value) || is_numeric($value) || is_string($value)) {
             return json_encode($value);
         }
         if ($value instanceof \stdClass) {
+            if (empty((array)$value)) {
+                return '{}';
+            }
             $value = (array)$value;
         }
         if (is_object($value) && method_exists($value, 'jsonSerialize')) {
             $value = $value->jsonSerialize();
         }
         if (is_array($value)) {
-            $value = array_map([$this, __FUNCTION__], $value);
+            if ($value === []) {
+                return '[]';
+            }
+            $value = array_map([static::class, __FUNCTION__], $value);
             if (array_keys($value) !== range(0, count($value) - 1)) {//isAssoc
                 $result = '{';
                 foreach ($value as $key => $v) {
@@ -44,39 +50,43 @@ class LJSON
 
             $params = [];
             for ($i = 0; $i < $x; $i++) {
-                $params["v" . $i] = new Parameter("v" . $i, $this);
+                $params["v" . $i] = new Parameter("v" . $i);
             }
             $newValue = call_user_func_array($value, $params);
-            return "(" . implode(',', array_keys($params)) . ") => (" . $this->stringify($newValue) . ")";
+            return "(" . implode(',', array_keys($params)) . ") => (" . static::stringify($newValue) . ")";
         }
         throw new \Exception;
     }
 
     /**
-     * @param string $jsonString
+     * @param string $json
      * @param bool|false $assoc
      * @return mixed|\Closure
+     * @throws \Exception
      */
-    public function parse($jsonString, $assoc = false)
+    public static function parse($json, $assoc = false)
     {
         $i = 0;
-        try {
-            $result = $this->parseValue($jsonString, $i, $assoc);
-            if ($i == strlen($jsonString)) {
-                echo 'return ' . $result . ';' . "\n = ";
-                return eval('return ' . $result . ';');
+        $length = strlen($json);
+        while ($length > $i && $json[$i] && $json[$i] <= ' ') $i++;
+        $result = static::parseValue($json, $i, $assoc);
+        while ($length > $i && $json[$i] && $json[$i] <= ' ') $i++;
+        if ($i == strlen($json)) {
+            $result = @eval('return ' . $result . ';');
+            if (!error_get_last()) {
+                return $result;
             }
-        } catch (\Exception $e) {
-            echo $e->getTraceAsString();
+            $error = error_get_last();
+            throw new \Exception($error['type'] . ' ' . $error['message']);
         }
-        return null;
+        throw new \Exception;
     }
 
     /**
      * @param string $chr
      * @return bool
      */
-    protected function isDigit($chr)
+    protected static function isDigit($chr)
     {
         $chr = ord($chr[0]);
         return $chr >= 48 && $chr <= 57;
@@ -88,55 +98,57 @@ class LJSON
      * @param bool|false $assoc
      * @return string
      */
-    protected function parseValue($json, &$i, $assoc = false)
+    protected static function parseValue($json, &$i, $assoc = false)
     {
         $length = strlen($json);
         $result = '';
         //null
-        if ($length > $i && $json[$i] == 'n' && $json[$i + 1] == 'u' && $json[$i + 2] == 'l' && $json[$i + 3] == 'l') {
+        if ($length > $i + 3 && $json[$i] == 'n' && $json[$i + 1] == 'u' && $json[$i + 2] == 'l' && $json[$i + 3] == 'l') {
             $i += 4;
             return "null";
         }
 
         //true
-        if ($length > $i && $json[$i] == 't' && $json[$i + 1] == 'r' && $json[$i + 2] == 'u' && $json[$i + 3] == 'e') {
+        if ($length > $i + 3 && $json[$i] == 't' && $json[$i + 1] == 'r' && $json[$i + 2] == 'u' && $json[$i + 3] == 'e') {
             $i += 4;
             return "true";
         }
 
         //false
-        if ($length > $i && $json[$i] == 'f' && $json[$i + 1] == 'a' && $json[$i + 2] == 'l' && $json[$i + 3] == 's' && $json[$i + 3] == 'e') {
+        if ($length > $i + 4 && $json[$i] == 'f' && $json[$i + 1] == 'a' && $json[$i + 2] == 'l' && $json[$i + 3] == 's' && $json[$i + 4] == 'e') {
             $i += 5;
             return "false";
         }
 
         //number
-        if ($length > $i && $this->isDigit($json[$i]) || $json[$i] == '-') {
+        if ($length > $i && (static::isDigit($json[$i]) || $json[$i] == '-')) {
             do {
                 $result .= $json[$i];
                 $i++;
-            } while ($length > $i && $this->isDigit($json[$i]));
-            if ($length > $i && $json[$i] == '.' && $this->isDigit($json[$i + 1])) {
+            } while ($length > $i && static::isDigit($json[$i]));
+            if ($length > $i && $json[$i] == '.' && static::isDigit($json[$i + 1])) {
                 $result .= '.';
                 $i++;
                 do {
                     $result .= $json[$i];
                     $i++;
-                } while ($length > $i && $this->isDigit($json[$i]));
+                } while ($length > $i && static::isDigit($json[$i]));
             }
             $exponent = '';
             if ($length > $i && strtolower($json[$i]) == 'e') {
                 $exponent = 'e';
                 $i++;
                 if ($length > $i && $json[$i] == '+') {
+                    $exponent .= $json[$i];
                     $i++;
                 } else if ($length > $i && $json[$i] == '-') {
+                    $exponent .= $json[$i];
                     $i++;
                 }
                 do {
                     $exponent .= $json[$i];
                     $i++;
-                } while ($length > $i && $this->isDigit($json[$i]));
+                } while ($length > $i && static::isDigit($json[$i]));
             }
             $result .= $exponent;
             return $result;
@@ -152,12 +164,10 @@ class LJSON
                         $code = "&#" . hexdec(substr($json, $i + 1, 4)) . ";";
                         $convmap = array(0x80, 0xFFFF, 0, 0xFFFF);
                         $result .= mb_decode_numericentity($code, $convmap, 'UTF-8');
-                        $i += 4;
+                        $i += 5;
                     } elseif (isset($escape[$json[$i]])) {
                         $result .= $escape[$json[$i]];
                         $i++;
-                    } else {
-                        break;
                     }
                 } else {
                     $result .= $json[$i];
@@ -177,9 +187,11 @@ class LJSON
                 return '[]';
             }
             do {
-                $elements[] = $this->parseValue($json, $i, $assoc);
+                while ($length > $i && $json[$i] && $json[$i] <= ' ') $i++;
+                $elements[] = static::parseValue($json, $i, $assoc);
                 while ($length > $i && $json[$i] && $json[$i] <= ' ') $i++;
             } while ($length > $i && $json[$i] == ',' && $i++);
+            while ($length > $i && $json[$i] && $json[$i] <= ' ') $i++;
 
             if ($length > $i && $json[$i] == ']') {
                 $i++;
@@ -191,16 +203,17 @@ class LJSON
             $i++;
             $elements = [];
             do {
-                $string = $this->parseValue($json, $i, $assoc);
+                while ($length > $i && $json[$i] && $json[$i] <= ' ') $i++;
+                $string = static::parseValue($json, $i, $assoc);
                 while ($length > $i && $json[$i] && $json[$i] <= ' ') $i++;
                 if (is_string($string) && $length > $i && $json[$i] == ':') {
                     $i++;
                     while ($length > $i && $json[$i] && $json[$i] <= ' ') $i++;
 
                     if ($assoc) {
-                        $elements[$string] = $this->parseValue($json, $i, $assoc);
+                        $elements[$string] = static::parseValue($json, $i, $assoc);
                     } else {
-                        $elements[$string] = $this->parseValue($json, $i, $assoc);
+                        $elements[$string] = static::parseValue($json, $i, $assoc);
                     }
                     while ($length > $i && $json[$i] && $json[$i] <= ' ') $i++;
                 }
@@ -227,12 +240,12 @@ class LJSON
             $body = 1;
 
             do {
-                if ($length > $i && $json[$i] == 'v' && $this->isDigit($json[$i + 1])) {
+                if ($length > $i && $json[$i] == 'v' && static::isDigit($json[$i + 1])) {
                     $parameter = '$v';
                     $i++;
                     $parameter .= $json[$i];
                     $i++;
-                    while ($length > $i && $this->isDigit($json[$i])) {
+                    while ($length > $i && static::isDigit($json[$i])) {
                         $parameter .= $json[$i];
                         $i++;
                     }
@@ -250,7 +263,7 @@ class LJSON
                     if ($length > $i && $json[$i] == '(') {
                         $i++;
                         while ($length > $i && $json[$i] && $json[$i] <= ' ') $i++;
-                        $body = $this->parseValue($json, $i, $assoc);
+                        $body = static::parseValue($json, $i, $assoc);
                         while ($length > $i && $json[$i] && $json[$i] <= ' ') $i++;
                     }
                     if ($length > $i && $json[$i] == ')') {
@@ -261,12 +274,12 @@ class LJSON
             }
         }
         //variable
-        if ($length > $i && $json[$i] == 'v' && $this->isDigit($json[$i + 1])) {
+        if ($length > $i && $json[$i] == 'v' && static::isDigit($json[$i + 1])) {
             $result = '$v';
             $i++;
             $result .= $json[$i];
             $i++;
-            while ($length > $i && $this->isDigit($json[$i])) {
+            while ($length > $i && static::isDigit($json[$i])) {
                 $result .= $json[$i];
                 $i++;
             }

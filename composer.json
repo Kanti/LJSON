@@ -1,15 +1,34 @@
 {
     "name": "kanti/ljson",
+    "description": "JSON extended with pure functions. in PHP",
+    "license": "GPL-2.0",
     "authors": [
         {
             "name": "Kanti",
-            "email": "git@kanti.de"
+            "email": "git@kanti.de",
+            "homepage": "https://kanti.de",
+            "role": "Developer"
         }
     ],
-    "autoload":{
+    "support": {
+        "forum": "https://github.com/Kanti/LJSON/issues",
+        "issues": "https://github.com/Kanti/LJSON/issues",
+        "source": "https://github.com/Kanti/LJSON"
+    },
+    "autoload": {
         "psr-4": {
-            "Kanti\\": "./"
+            "Kanti\\": "src"
         }
     },
-    "require": {}
+    "autoload-dev": {
+        "psr-4": {
+            "Kanti\\Test\\": "tests"
+        }
+    },
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.8.*"
+    }
 }
