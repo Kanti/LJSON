@@ -18,7 +18,8 @@ class LJSON
             return json_encode($value);
         }
         if ($value instanceof \stdClass) {
-            if (empty((array)$value)) {
+            $emptyValueTest = (array) $value;
+            if (empty($emptyValueTest)) {
                 return '{}';
             }
             $value = (array)$value;
