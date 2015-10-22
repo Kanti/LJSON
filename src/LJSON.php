@@ -18,11 +18,10 @@ class LJSON
             return json_encode($value);
         }
         if ($value instanceof \stdClass) {
-            $emptyValueTest = (array) $value;
-            if (empty($emptyValueTest)) {
+            $value = (array)$value;
+            if (empty($value)) {
                 return '{}';
             }
-            $value = (array)$value;
         }
         if (is_object($value) && method_exists($value, 'jsonSerialize')) {
             $value = $value->jsonSerialize();
@@ -31,7 +30,7 @@ class LJSON
             if ($value === []) {
                 return '[]';
             }
-            $value = array_map([static::class, __FUNCTION__], $value);
+            $value = array_map([__CLASS__, __FUNCTION__], $value);
             if (array_keys($value) !== range(0, count($value) - 1)) {//isAssoc
                 $result = '{';
                 foreach ($value as $key => $v) {
@@ -163,8 +162,8 @@ class LJSON
                     $i++;
                     if ($json[$i] === 'u') {
                         $code = "&#" . hexdec(substr($json, $i + 1, 4)) . ";";
-                        $convmap = array(0x80, 0xFFFF, 0, 0xFFFF);
-                        $result .= mb_decode_numericentity($code, $convmap, 'UTF-8');
+                        $conVMap = array(0x80, 0xFFFF, 0, 0xFFFF);
+                        $result .= mb_decode_numericentity($code, $conVMap, 'UTF-8');
                         $i += 5;
                     } elseif (isset($escape[$json[$i]])) {
                         $result .= $escape[$json[$i]];
