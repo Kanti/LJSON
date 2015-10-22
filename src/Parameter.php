@@ -1,7 +1,6 @@
 <?php
 namespace Kanti;
 
-
 class Parameter
 {
     protected $result = '';

@@ -1,11 +1,10 @@
 <?php
 namespace Kanti\Test;
 
-
 use Kanti\LJSON;
 use Kanti\Test\Asset\Customer;
 
-class StringifyTest extends \PHPUnit_Framework_TestCase
+class LJSONTest extends \PHPUnit_Framework_TestCase
 {
     protected $testDataNormalJson;
     protected $testDataLJson;

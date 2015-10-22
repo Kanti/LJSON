@@ -37,25 +37,23 @@ class LJSON
                     $result .= '"' . $key . '":' . $v . ',';
                 }
                 return rtrim($result, ',') . '}';
-            } else {
-                return '[' . implode(',', $value) . ']';
             }
+            return '[' . implode(',', $value) . ']';
         }
         if ($value instanceof Parameter) {
             return (string)$value;
         }
         if (is_callable($value)) {
             $reflection = new \ReflectionFunction($value);
-            $x = count($reflection->getParameters());
 
             $params = [];
-            for ($i = 0; $i < $x; $i++) {
+            for ($i = 0; $i < count($reflection->getParameters()); $i++) {
                 $params["v" . $i] = new Parameter("v" . $i);
             }
             $newValue = call_user_func_array($value, $params);
             return "(" . implode(',', array_keys($params)) . ") => (" . static::stringify($newValue) . ")";
         }
-        throw new \Exception;
+        throw new \Exception('type cannot be converted ', 1445505204);
     }
 
     /**
@@ -68,18 +66,20 @@ class LJSON
     {
         $i = 0;
         $length = strlen($json);
-        while ($length > $i && $json[$i] && $json[$i] <= ' ') $i++;
+        while ($length > $i && $json[$i] && $json[$i] <= ' ' && $i++) {
+        }
         $result = static::parseValue($json, $i, $assoc);
-        while ($length > $i && $json[$i] && $json[$i] <= ' ') $i++;
+        while ($length > $i && $json[$i] && $json[$i] <= ' ' && $i++) {
+        }
         if ($i == strlen($json)) {
             $result = @eval('return ' . $result . ';');
             if (!error_get_last()) {
                 return $result;
             }
             $error = error_get_last();
-            throw new \Exception($error['type'] . ' ' . $error['message']);
+            throw new \Exception($error['type'] . ' ' . $error['message'], 1445505237);
         }
-        throw new \Exception;
+        throw new \Exception('Could not get Parsed', 1445505229);
     }
 
     /**
@@ -93,6 +93,17 @@ class LJSON
     }
 
     /**
+     * @param string $string
+     * @param int $pos
+     * @param string $word
+     * @return bool
+     */
+    protected static function isWord($string, $pos, $word)
+    {
+        return strlen($string) >= ($pos + strlen($word)) && substr($string, $pos, strlen($word)) === $word;
+    }
+
+    /**
      * @param string $json
      * @param int $i position in string
      * @param bool|false $assoc
@@ -103,19 +114,19 @@ class LJSON
         $length = strlen($json);
         $result = '';
         //null
-        if ($length > $i + 3 && $json[$i] == 'n' && $json[$i + 1] == 'u' && $json[$i + 2] == 'l' && $json[$i + 3] == 'l') {
+        if (static::isWord($json, $i, 'null')) {
             $i += 4;
             return "null";
         }
 
         //true
-        if ($length > $i + 3 && $json[$i] == 't' && $json[$i + 1] == 'r' && $json[$i + 2] == 'u' && $json[$i + 3] == 'e') {
+        if (static::isWord($json, $i, 'true')) {
             $i += 4;
             return "true";
         }
 
         //false
-        if ($length > $i + 4 && $json[$i] == 'f' && $json[$i + 1] == 'a' && $json[$i + 2] == 'l' && $json[$i + 3] == 's' && $json[$i + 4] == 'e') {
+        if (static::isWord($json, $i, 'false')) {
             $i += 5;
             return "false";
         }
@@ -181,17 +192,24 @@ class LJSON
         if ($length > $i && $json[$i] == '[') {
             $i++;
             $elements = [];
-            while ($length > $i && $json[$i] && $json[$i] <= ' ') $i++;
+            while ($length > $i && $json[$i] && $json[$i] <= ' ' && $i++) {
+            }
             if ($length > $i && $json[$i] == ']') {
                 $i++;
                 return '[]';
             }
             do {
-                while ($length > $i && $json[$i] && $json[$i] <= ' ') $i++;
+                while ($length > $i && $json[$i] && $json[$i] <= ' ' && $i++) {
+                    ;
+                }
                 $elements[] = static::parseValue($json, $i, $assoc);
-                while ($length > $i && $json[$i] && $json[$i] <= ' ') $i++;
+                while ($length > $i && $json[$i] && $json[$i] <= ' ' && $i++) {
+                    ;
+                }
             } while ($length > $i && $json[$i] == ',' && $i++);
-            while ($length > $i && $json[$i] && $json[$i] <= ' ') $i++;
+            while ($length > $i && $json[$i] && $json[$i] <= ' ' && $i++) {
+                ;
+            }
 
             if ($length > $i && $json[$i] == ']') {
                 $i++;
@@ -203,19 +221,27 @@ class LJSON
             $i++;
             $elements = [];
             do {
-                while ($length > $i && $json[$i] && $json[$i] <= ' ') $i++;
+                while ($length > $i && $json[$i] && $json[$i] <= ' ' && $i++) {
+                    ;
+                }
                 $string = static::parseValue($json, $i, $assoc);
-                while ($length > $i && $json[$i] && $json[$i] <= ' ') $i++;
+                while ($length > $i && $json[$i] && $json[$i] <= ' ' && $i++) {
+                    ;
+                }
                 if (is_string($string) && $length > $i && $json[$i] == ':') {
                     $i++;
-                    while ($length > $i && $json[$i] && $json[$i] <= ' ') $i++;
+                    while ($length > $i && $json[$i] && $json[$i] <= ' ' && $i++) {
+                        ;
+                    }
 
                     if ($assoc) {
                         $elements[$string] = static::parseValue($json, $i, $assoc);
                     } else {
                         $elements[$string] = static::parseValue($json, $i, $assoc);
                     }
-                    while ($length > $i && $json[$i] && $json[$i] <= ' ') $i++;
+                    while ($length > $i && $json[$i] && $json[$i] <= ' ' && $i++) {
+                        ;
+                    }
                 }
             } while ($length > $i && $json[$i] == ',' && $i++);
             if ($length > $i && $json[$i] == '}') {
@@ -256,15 +282,23 @@ class LJSON
             if ($length > $i && $json[$i] == ')') {
                 $i++;
 
-                while ($length > $i && $json[$i] && $json[$i] <= ' ') $i++;
+                while ($length > $i && $json[$i] && $json[$i] <= ' ' && $i++) {
+                    ;
+                }
                 if ($length > $i && $json[$i] == '=' && $json[$i + 1] == '>') {
                     $i += 2;
-                    while ($length > $i && $json[$i] && $json[$i] <= ' ') $i++;
+                    while ($length > $i && $json[$i] && $json[$i] <= ' ' && $i++) {
+                        ;
+                    }
                     if ($length > $i && $json[$i] == '(') {
                         $i++;
-                        while ($length > $i && $json[$i] && $json[$i] <= ' ') $i++;
+                        while ($length > $i && $json[$i] && $json[$i] <= ' ' && $i++) {
+                            ;
+                        }
                         $body = static::parseValue($json, $i, $assoc);
-                        while ($length > $i && $json[$i] && $json[$i] <= ' ') $i++;
+                        while ($length > $i && $json[$i] && $json[$i] <= ' ' && $i++) {
+                            ;
+                        }
                     }
                     if ($length > $i && $json[$i] == ')') {
                         $i++;
