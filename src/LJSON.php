@@ -66,10 +66,12 @@ class LJSON
     {
         $i = 0;
         $length = strlen($json);
-        while ($length > $i && $json[$i] && $json[$i] <= ' ' && $i++) {
+        while ($length > $i && $json[$i] && $json[$i] <= ' ') {
+            $i++;
         }
         $result = static::parseValue($json, $i, $assoc);
-        while ($length > $i && $json[$i] && $json[$i] <= ' ' && $i++) {
+        while ($length > $i && $json[$i] && $json[$i] <= ' ') {
+            $i++;
         }
         if ($i == strlen($json)) {
             $result = @eval('return ' . $result . ';');
@@ -101,6 +103,18 @@ class LJSON
     protected static function isWord($string, $pos, $word)
     {
         return strlen($string) >= ($pos + strlen($word)) && substr($string, $pos, strlen($word)) === $word;
+    }
+
+    /**
+     * @param string $string
+     * @param int $i
+     */
+    protected static function skipSpace($string, &$i)
+    {
+        $length = strlen($string);
+        while ($length > $i && $string[$i] && $string[$i] <= ' ') {
+            $i++;
+        }
     }
 
     /**
@@ -192,24 +206,19 @@ class LJSON
         if ($length > $i && $json[$i] == '[') {
             $i++;
             $elements = [];
-            while ($length > $i && $json[$i] && $json[$i] <= ' ' && $i++) {
-            }
+            static::skipSpace($json, $i);
             if ($length > $i && $json[$i] == ']') {
                 $i++;
                 return '[]';
             }
             do {
-                while ($length > $i && $json[$i] && $json[$i] <= ' ' && $i++) {
-                    ;
+                while ($length > $i && $json[$i] && $json[$i] <= ' ') {
+                    $i++;
                 }
                 $elements[] = static::parseValue($json, $i, $assoc);
-                while ($length > $i && $json[$i] && $json[$i] <= ' ' && $i++) {
-                    ;
-                }
+                static::skipSpace($json, $i);
             } while ($length > $i && $json[$i] == ',' && $i++);
-            while ($length > $i && $json[$i] && $json[$i] <= ' ' && $i++) {
-                ;
-            }
+            static::skipSpace($json, $i);
 
             if ($length > $i && $json[$i] == ']') {
                 $i++;
@@ -221,27 +230,19 @@ class LJSON
             $i++;
             $elements = [];
             do {
-                while ($length > $i && $json[$i] && $json[$i] <= ' ' && $i++) {
-                    ;
-                }
+                static::skipSpace($json, $i);
                 $string = static::parseValue($json, $i, $assoc);
-                while ($length > $i && $json[$i] && $json[$i] <= ' ' && $i++) {
-                    ;
-                }
+                static::skipSpace($json, $i);
                 if (is_string($string) && $length > $i && $json[$i] == ':') {
                     $i++;
-                    while ($length > $i && $json[$i] && $json[$i] <= ' ' && $i++) {
-                        ;
-                    }
+                    static::skipSpace($json, $i);
 
                     if ($assoc) {
                         $elements[$string] = static::parseValue($json, $i, $assoc);
                     } else {
                         $elements[$string] = static::parseValue($json, $i, $assoc);
                     }
-                    while ($length > $i && $json[$i] && $json[$i] <= ' ' && $i++) {
-                        ;
-                    }
+                    static::skipSpace($json, $i);
                 }
             } while ($length > $i && $json[$i] == ',' && $i++);
             if ($length > $i && $json[$i] == '}') {
@@ -282,23 +283,15 @@ class LJSON
             if ($length > $i && $json[$i] == ')') {
                 $i++;
 
-                while ($length > $i && $json[$i] && $json[$i] <= ' ' && $i++) {
-                    ;
-                }
+                static::skipSpace($json, $i);
                 if ($length > $i && $json[$i] == '=' && $json[$i + 1] == '>') {
                     $i += 2;
-                    while ($length > $i && $json[$i] && $json[$i] <= ' ' && $i++) {
-                        ;
-                    }
+                    static::skipSpace($json, $i);
                     if ($length > $i && $json[$i] == '(') {
                         $i++;
-                        while ($length > $i && $json[$i] && $json[$i] <= ' ' && $i++) {
-                            ;
-                        }
+                        static::skipSpace($json, $i);
                         $body = static::parseValue($json, $i, $assoc);
-                        while ($length > $i && $json[$i] && $json[$i] <= ' ' && $i++) {
-                            ;
-                        }
+                        static::skipSpace($json, $i);
                     }
                     if ($length > $i && $json[$i] == ')') {
                         $i++;
