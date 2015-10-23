@@ -17,7 +17,7 @@ class LJSONTest extends \PHPUnit_Framework_TestCase
             0.0, 0.1, 200000.222,
             0.43E+20,
             0.43E-20,
-            "hallo", "❤ unicode Hearth", "❥ unicode Hearth 2", "\n newline", "\" escaped",
+            "hallo", "❤ unicode Hearth", "❥ unicode Hearth 2", "\n newline", "\" escaped", "\b test \\b",
             [], [1, 2],
             ["a" => 2],
             new \stdClass(),

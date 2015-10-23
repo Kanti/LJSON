@@ -15,7 +15,8 @@ class Parameter
      */
     public function __invoke()
     {
-        return new self($this->result . '(' . implode(',', array_map(['\Kanti\LJSON', "stringify"], func_get_args())) . ')');
+        $parameters = implode(',', array_map(['\Kanti\LJSON', 'stringify'], func_get_args()));
+        return new self($this->result . '(' . $parameters . ')');
     }
 
     public function __toString()

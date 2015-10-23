@@ -14,7 +14,10 @@ class LJSON
      */
     public static function stringify($value)
     {
-        if (is_null($value) || is_bool($value) || is_int($value) || is_float($value) || is_double($value) || is_numeric($value) || is_string($value)) {
+        if (is_null($value) || is_bool($value)
+            || is_int($value) || is_float($value) || is_double($value) || is_numeric($value)
+            || is_string($value)
+        ) {
             return json_encode($value);
         }
         if ($value instanceof \stdClass) {
@@ -65,7 +68,6 @@ class LJSON
     public static function parse($json, $assoc = false)
     {
         $i = 0;
-        $length = strlen($json);
         static::skipSpace($json, $i);
         $result = static::parseValue($json, $i, $assoc);
         static::skipSpace($json, $i);
@@ -177,13 +179,22 @@ class LJSON
         //string
         if ($length > $i && $json[$i] == '"') {
             $i++;
-            $escape = array('"' => '"', '\\' => '\\', '/' => '/', 'b' => "\b", 'f' => "\f", 'n' => "\n", 'r' => "\r", 't' => "\t");
+            $escape = [
+                '"' => '"',
+                '\\' => '\\',
+                '/' => '/',
+                'b' => "\b",
+                'f' => "\f",
+                'n' => "\n",
+                'r' => "\r",
+                't' => "\t"
+            ];
             while ($length > $i && $json[$i] != '"') {
                 if ($json[$i] == '\\') {
                     $i++;
                     if ($json[$i] === 'u') {
                         $code = "&#" . hexdec(substr($json, $i + 1, 4)) . ";";
-                        $conVMap = array(0x80, 0xFFFF, 0, 0xFFFF);
+                        $conVMap = [0x80, 0xFFFF, 0, 0xFFFF];
                         $result .= mb_decode_numericentity($code, $conVMap, 'UTF-8');
                         $i += 5;
                     } elseif (isset($escape[$json[$i]])) {
@@ -231,11 +242,7 @@ class LJSON
                     $i++;
                     static::skipSpace($json, $i);
 
-                    if ($assoc) {
-                        $elements[$string] = static::parseValue($json, $i, $assoc);
-                    } else {
-                        $elements[$string] = static::parseValue($json, $i, $assoc);
-                    }
+                    $elements[$string] = static::parseValue($json, $i, $assoc);
                     static::skipSpace($json, $i);
                 }
             } while ($length > $i && $json[$i] == ',' && $i++);
