@@ -60,6 +60,66 @@ class LJSON
     }
 
     /**
+     * @param callable $library
+     * @param callable $function
+     * @return \Closure
+     */
+    public static function withLib(callable $library, callable $function)
+    {
+        return function () use ($library, $function) {
+            return call_user_func_array($function, array_merge([$library], func_get_args()));
+        };
+    }
+
+    public static function withStdLib(callable $function)
+    {
+        $stdLibrary = function ($function, $parameter1, $parameter2 = null) {
+            switch ($function) {
+                case 'sqrt':
+                    return sqrt($parameter1);
+            }
+            if ($parameter2 === null) {
+                return null;
+            }
+            switch ($function) {
+                case '+':
+                    return $parameter1 + $parameter2;
+                case '-':
+                    return $parameter1 - $parameter2;
+                case '*':
+                    return $parameter1 * $parameter2;
+                case '/':
+                    return $parameter1 / $parameter2;
+            }
+            return null;
+        };
+        return static::withLib($stdLibrary, $function);
+    }
+
+    /**
+     * @param callable $lib
+     * @param string $json
+     * @param bool|false $assoc
+     * @return \Closure
+     * @throws \Exception
+     */
+    public static function parseWithLib(callable $lib, $json, $assoc = false)
+    {
+        return static::withLib($lib, static::parse($json, $assoc));
+    }
+
+    /**
+     * @param string $json
+     * @param bool|false $assoc
+     * @return \Closure
+     * @throws \Exception
+     */
+    public static function parseWithStdLib($json, $assoc = false)
+    {
+        return static::withStdLib(static::parse($json, $assoc));
+    }
+
+    /**
      * @param string $json
      * @param bool|false $assoc
      * @return mixed|\Closure
@@ -69,17 +129,23 @@ class LJSON
     {
         $i = 0;
         static::skipSpace($json, $i);
-        $result = static::parseValue($json, $i, $assoc);
+        $resultCode = static::parseValue($json, $i, $assoc);
         static::skipSpace($json, $i);
         if ($i == strlen($json)) {
-            $result = @eval('return ' . $result . ';');
+            $resultCode = 'return ' . $resultCode . ';';
+            $result = static::evaly($resultCode);
             if (!error_get_last()) {
                 return $result;
             }
             $error = error_get_last();
-            throw new \Exception($error['type'] . ' ' . $error['message'], 1445505237);
+            throw new \Exception($error['type'] . ' ' . $error['message'] . "\n" . $resultCode, 1445505237);
         }
         throw new \Exception('Could not get Parsed', 1445505229);
+    }
+
+    public static function evaly($string)
+    {
+        return @eval($string);
     }
 
     /**
@@ -207,7 +273,7 @@ class LJSON
                 }
             }
             $i++;
-            return var_export($result, true);
+            return '"' . str_replace('"', '\"', $result) . '"';
         }
         //array
         if ($length > $i && $json[$i] == '[') {
@@ -310,6 +376,29 @@ class LJSON
             while ($length > $i && static::isDigit($json[$i])) {
                 $result .= $json[$i];
                 $i++;
+            }
+            if ($length > $i && $json[$i] == '(') {
+                $i++;
+                $elements = [];
+                static::skipSpace($json, $i);
+                if ($length > $i && $json[$i] == ')') {
+                    $i++;
+                    $result .= '()';
+                    return $result;
+                }
+                do {
+                    static::skipSpace($json, $i);
+                    $elements[] = static::parseValue($json, $i, $assoc);
+                    static::skipSpace($json, $i);
+                } while ($length > $i && $json[$i] == ',' && $i++);
+                static::skipSpace($json, $i);
+
+                if ($length > $i && $json[$i] == ')') {
+                    $i++;
+                    $result .= '(' . implode(',', $elements) . ')';
+                    return $result;
+                }
+                return '';
             }
             return $result;
         }

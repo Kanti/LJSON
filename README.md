@@ -1,5 +1,6 @@
-[![Travis](https://img.shields.io/travis/Kanti/LJSON.svg?style=flat-square)](https://travis-ci.org/Kanti/LJSON/)
+[![Packagist](https://img.shields.io/packagist/v/Kanti/ljson.svg?style=flat-square)](https://packagist.org/packages/kanti/ljson)
 [![Packagist](https://img.shields.io/packagist/l/kanti/ljson.svg?style=flat-square)](https://www.gnu.org/licenses/gpl-2.0.html)
+[![Travis](https://img.shields.io/travis/Kanti/LJSON.svg?style=flat-square)](https://travis-ci.org/Kanti/LJSON/)
 [![Code Climate](https://img.shields.io/codeclimate/github/Kanti/LJSON.svg?style=flat-square)](https://codeclimate.com/github/Kanti/LJSON)
 [![Code Climate](https://img.shields.io/codeclimate/coverage/github/Kanti/LJSON.svg?style=flat-square)](https://codeclimate.com/github/Kanti/LJSON/coverage)
 # LJSON
