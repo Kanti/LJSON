@@ -66,13 +66,9 @@ class LJSON
     {
         $i = 0;
         $length = strlen($json);
-        while ($length > $i && $json[$i] && $json[$i] <= ' ') {
-            $i++;
-        }
+        static::skipSpace($json, $i);
         $result = static::parseValue($json, $i, $assoc);
-        while ($length > $i && $json[$i] && $json[$i] <= ' ') {
-            $i++;
-        }
+        static::skipSpace($json, $i);
         if ($i == strlen($json)) {
             $result = @eval('return ' . $result . ';');
             if (!error_get_last()) {
@@ -212,9 +208,7 @@ class LJSON
                 return '[]';
             }
             do {
-                while ($length > $i && $json[$i] && $json[$i] <= ' ') {
-                    $i++;
-                }
+                static::skipSpace($json, $i);
                 $elements[] = static::parseValue($json, $i, $assoc);
                 static::skipSpace($json, $i);
             } while ($length > $i && $json[$i] == ',' && $i++);

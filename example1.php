@@ -22,4 +22,3 @@ echo $personStr . "\n";
 //{"name":"John","mail":(v0) => ({"author":"John","message":v0})}
 echo \Kanti\LJSON::stringify($mail) . "\n";
 //{"author":"John","message":"hello"}
-
