@@ -40,6 +40,16 @@ class LJSONTest extends \PHPUnit_Framework_TestCase
             "(v0) => (v0(v0))" => function ($a) {
                 return $a($a);
             },
+            "(v0) => (() => (v0))" => function ($a) {
+                return function () use ($a) {
+                    return $a;
+                };
+            },
+            "(v0) => (() => (v0()))" => function ($a) {
+                return function () use ($a) {
+                    return $a();
+                };
+            },
         ];
     }
 
@@ -143,7 +153,6 @@ class LJSONTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-
     public function testParseLJson6()
     {
         $a = function ($x, $y) {
@@ -156,6 +165,22 @@ class LJSONTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             $expectedFunction($a),
             $actualFunction($a)
+        );
+    }
+
+    public function testParseLJson7()
+    {
+        $expectedFunction = function ($a) {
+            return function () use ($a) {
+                return [$a];
+            };
+        };
+        $actualFunction = LJSON::parse(LJSON::stringify($expectedFunction));
+        $expectedFunction2 = $expectedFunction(1);
+        $actualFunction2 = $actualFunction(1);
+        $this->assertEquals(
+            $expectedFunction2(),
+            $actualFunction2()
         );
     }
 
@@ -202,8 +227,16 @@ class LJSONTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Exception
      */
-    public function testParseExceptionNotCompleteVariable()
+    public function testParseExceptionVariableNotSet()
     {
         LJSON::parse('v1( ');
+    }
+
+    /**
+     * @expectedException \Exception
+     */
+    public function testParseExceptionNotCompletedVariableCall()
+    {
+        LJSON::parse('(v0) => v0( ');
     }
 }

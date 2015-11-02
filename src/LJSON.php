@@ -131,21 +131,20 @@ class LJSON
         static::skipSpace($json, $i);
         $resultCode = static::parseValue($json, $i, $assoc);
         static::skipSpace($json, $i);
-        if ($i == strlen($json)) {
-            $resultCode = 'return ' . $resultCode . ';';
-            $result = static::evaly($resultCode);
-            if (!error_get_last()) {
-                return $result;
-            }
-            $error = error_get_last();
-            throw new \Exception($error['type'] . ' ' . $error['message'] . "\n" . $resultCode, 1445505237);
+        if ($i == strlen($json) && $resultCode !== '') {
+            return static::evaly($resultCode);
         }
         throw new \Exception('Could not get Parsed', 1445505229);
     }
 
+    /**
+     * @param $string
+     * @return mixed
+     * @throws \Exception
+     */
     public static function evaly($string)
     {
-        return @eval($string);
+        return eval('return ' . $string . ';');
     }
 
     /**
@@ -185,9 +184,10 @@ class LJSON
      * @param string $json
      * @param int $i position in string
      * @param bool|false $assoc
+     * @param array $variables
      * @return string
      */
-    protected static function parseValue($json, &$i, $assoc = false)
+    protected static function parseValue($json, &$i, $assoc = false, $variables = [])
     {
         $length = strlen($json);
         $result = '';
@@ -286,7 +286,7 @@ class LJSON
             }
             do {
                 static::skipSpace($json, $i);
-                $elements[] = static::parseValue($json, $i, $assoc);
+                $elements[] = static::parseValue($json, $i, $assoc, $variables);
                 static::skipSpace($json, $i);
             } while ($length > $i && $json[$i] == ',' && $i++);
             static::skipSpace($json, $i);
@@ -302,13 +302,13 @@ class LJSON
             $elements = [];
             do {
                 static::skipSpace($json, $i);
-                $string = static::parseValue($json, $i, $assoc);
+                $string = static::parseValue($json, $i, $assoc, $variables);
                 static::skipSpace($json, $i);
                 if (is_string($string) && $length > $i && $json[$i] == ':') {
                     $i++;
                     static::skipSpace($json, $i);
 
-                    $elements[$string] = static::parseValue($json, $i, $assoc);
+                    $elements[$string] = static::parseValue($json, $i, $assoc, $variables);
                     static::skipSpace($json, $i);
                 }
             } while ($length > $i && $json[$i] == ',' && $i++);
@@ -333,6 +333,7 @@ class LJSON
             $parameters = [];
             $body = 1;
 
+            $use = $variables;
             do {
                 if ($length > $i && $json[$i] == 'v' && static::isDigit($json[$i + 1])) {
                     $parameter = '$v';
@@ -347,6 +348,7 @@ class LJSON
                 }
 
             } while ($length > $i && $json[$i] == ',' && $i++);
+            $variables += $parameters;
             if ($length > $i && $json[$i] == ')') {
                 $i++;
 
@@ -357,12 +359,16 @@ class LJSON
                     if ($length > $i && $json[$i] == '(') {
                         $i++;
                         static::skipSpace($json, $i);
-                        $body = static::parseValue($json, $i, $assoc);
+                        $body = static::parseValue($json, $i, $assoc, $variables);
                         static::skipSpace($json, $i);
                     }
                     if ($length > $i && $json[$i] == ')') {
                         $i++;
-                        return 'function(' . implode(',', $parameters) . '){return ' . $body . ';}';
+                        $use = implode(',', $use);
+                        if (strlen($use) > 0) {
+                            $use = 'use(' . $use . ')';
+                        }
+                        return 'function(' . implode(',', $parameters) . ')' . $use . '{return ' . $body . ';}';
                     }
                 }
             }
@@ -377,6 +383,11 @@ class LJSON
                 $result .= $json[$i];
                 $i++;
             }
+            if (!in_array($result, $variables)) {
+                //wrong;
+                $i--;
+                return '';
+            }
             if ($length > $i && $json[$i] == '(') {
                 $i++;
                 $elements = [];
@@ -388,7 +399,7 @@ class LJSON
                 }
                 do {
                     static::skipSpace($json, $i);
-                    $elements[] = static::parseValue($json, $i, $assoc);
+                    $elements[] = static::parseValue($json, $i, $assoc, $variables);
                     static::skipSpace($json, $i);
                 } while ($length > $i && $json[$i] == ',' && $i++);
                 static::skipSpace($json, $i);

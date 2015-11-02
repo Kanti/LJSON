@@ -42,7 +42,7 @@ class LibraryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([-12, 12, 0, 0, sqrt(0)], $resultFunction(0, -12));
     }
 
-    public function _testParseWithLibFunction()
+    public function testParseWithLibFunction()
     {
         $lib = function ($function, $parameter1, $parameter2) {
             switch ($function) {
@@ -61,7 +61,7 @@ class LibraryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(-12, $resultFunction(0, -12));
     }
 
-    public function _testParseWithStdLibFunction()
+    public function testParseWithStdLibFunction()
     {
         $resultFunction = LJSON::parseWithStdLib(
             '(v0,v1,v2) => ([v0("+",v1,v2),v0("-",v1,v2),v0("*",v1,v2),v0("\/",v1,v2),v0("sqrt",v1)])'
@@ -70,5 +70,28 @@ class LibraryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([3, -1, 2, 0.5, 1], $resultFunction(1, 2));
         $this->assertEquals([13, -3, 40, 5 / 8, sqrt(5)], $resultFunction(5, 8));
         $this->assertEquals([-12, 12, 0, 0, sqrt(0)], $resultFunction(0, -12));
+    }
+
+    /**
+     * code coverage
+     */
+    public function testParseWithStdLibFunction2()
+    {
+        $resultFunction = LJSON::parseWithStdLib(
+            '(v0,v1) => (v0("error",v0,null))'
+        );
+        $this->assertEquals(null, $resultFunction(1));
+    }
+
+    /**
+     * code coverage
+     */
+    public function testParseWithStdLibFunction3()
+    {
+        $resultFunction = LJSON::parseWithStdLib(
+            '(v0,v1) => (v0("error",v0,v0))'
+        );
+
+        $this->assertEquals(null, $resultFunction(1));
     }
 }
