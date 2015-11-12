@@ -77,7 +77,8 @@ class LJSON
             $parameterCount += count($params);
 
             if (static::$oldErrorHandler === null) {
-                $oldEH = static::$oldErrorHandler = set_error_handler(null);
+                $oldEH = static::$oldErrorHandler = set_error_handler(function () {
+                });
                 set_error_handler(function ($severity, $message, $filename, $lineNumber) use ($oldEH) {
                     $message = preg_replace('/Object of class Kanti\\\\Parameter could not be converted to (.*)/', "Parameter's can not be converted (to $1)", $message, -1, $count);
                     if ($count) {
@@ -88,11 +89,15 @@ class LJSON
                     } catch (\Exception $e) {
                         throw $e;
                     }
-
                 });
             }
             $newValue = call_user_func_array($value, $params);
-            set_error_handler(static::$oldErrorHandler);
+            if (static::$oldErrorHandler === null) {
+                set_error_handler(function () {
+                });
+            } else {
+                set_error_handler(static::$oldErrorHandler);
+            }
             static::$oldErrorHandler = null;
 
             return "(" . implode(',', array_keys($params)) . ") => (" . static::stringify($newValue, $parameterCount) . ")";

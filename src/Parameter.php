@@ -53,9 +53,11 @@ class Parameter implements \ArrayAccess, \IteratorAggregate, \Countable
         $line = __LINE__;
         $e = new \Exception;
         $trace = $e->getTrace();
-        if (isset($trace[1])) {
-            $file = $trace[1]['file'];
-            $line = $trace[1]['line'];
+        var_dump($trace);
+        die();
+        if (isset($trace[0])) {
+            $file = $trace[0]['file'];
+            $line = $trace[0]['line'];
         }
         throw new StringifyException('You can not call a method of a parameter', $file, $line);
     }
