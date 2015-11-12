@@ -13,7 +13,7 @@ LJSON is a drop-in replacement for [JSON](http://www.json.org) which also allows
 <?php
 require_once "vendor/autoload.php";
 
-// A random JS object with a pure function inside.
+// A random object with a pure function inside.
 $person = [
     "name" => "John",
     "mail" => function ($msg) {
@@ -24,11 +24,10 @@ $person = [
     },
 ];
 
-// A random JS object with a pure function inside.
 $personStr    = \Kanti\LJSON::stringify($person);
 $personVal    = \Kanti\LJSON::parse($personStr);
 $mailFunction = $personVal->mail;
-$mail         = $mailFunction("hello");// would crash with JSON
+$mail         = $mailFunction("hello");// would crash with json_encode
 
 echo $personStr . "\n";
 echo \Kanti\LJSON::stringify($mail) . "\n";

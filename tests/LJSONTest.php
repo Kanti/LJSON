@@ -50,6 +50,11 @@ class LJSONTest extends \PHPUnit_Framework_TestCase
                     return $a();
                 };
             },
+            "(v0) => ((v1,v2) => (v0(v1,v2)))" => function ($a) {
+                return function ($b, $c) use ($a) {
+                    return $a($b, $c);
+                };
+            },
         ];
     }
 

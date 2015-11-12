@@ -26,8 +26,8 @@ install:
 # Commands you want to run that will verify your build.
 script:
   - ./vendor/bin/phpunit -c tests/phpunit.xml
-  - ./vendor/bin/phpcs --standard=PSR2 ./src ./tests -n
-  - ./vendor/bin/phpcpd ./src ./tests -n
+  - ./vendor/bin/phpcs --standard=PSR2 ./src ./tests ./example -n
+  - ./vendor/bin/phpcpd ./src ./tests ./example -n
   - >
     if [[ "$CODECLIMATE" == "yes" ]]; then
       CODECLIMATE_REPO_TOKEN=a84b61ed5cca760894732b4b9e61dc15d584c89abd4c696dc78ca78e429b1207 ./vendor/bin/test-reporter

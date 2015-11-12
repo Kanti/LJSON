@@ -1,7 +1,7 @@
 <?php
-require_once "vendor/autoload.php";
+require_once "../vendor/autoload.php";
 
-// A random JS object with a pure function inside.
+// A random object with a pure function inside.
 $person = [
     "name" => "John",
     "mail" => function ($msg) {
@@ -12,7 +12,6 @@ $person = [
     },
 ];
 
-// A random JS object with a pure function inside.
 $personStr = \Kanti\LJSON::stringify($person);
 $personVal = \Kanti\LJSON::parse($personStr);
 $mailFunction = $personVal->mail;
