@@ -75,7 +75,7 @@ class LibraryTest extends \PHPUnit_Framework_TestCase
     /**
      * code coverage
      */
-    public function testParseWithStdLibFunction2()
+    public function testParseWithStdLibFunctionError1()
     {
         $resultFunction = LJSON::parseWithStdLib(
             '(v0,v1) => (v0("error",v0,null))'
@@ -86,7 +86,7 @@ class LibraryTest extends \PHPUnit_Framework_TestCase
     /**
      * code coverage
      */
-    public function testParseWithStdLibFunction3()
+    public function testParseWithStdLibFunctionError2()
     {
         $resultFunction = LJSON::parseWithStdLib(
             '(v0,v1) => (v0("error",v0,v0))'

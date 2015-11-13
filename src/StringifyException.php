@@ -1,12 +1,25 @@
 <?php
 namespace Kanti;
 
+/**
+ * Class StringifyException
+ * @package Kanti
+ */
 class StringifyException extends \Exception
 {
-    public function __construct($message, $file, $line, $code = 0)
+    /**
+     * StringifyException constructor.
+     * @param string $message
+     * @param string $file
+     * @param int $line
+     * @param int $code
+     * @param \Exception $previous
+     * @internal
+     */
+    public function __construct($message, $file, $line, $code = 0, $previous = null)
     {
         LJSON::restoreErrorHandler();
-        parent::__construct($message, $code, null);
+        parent::__construct($message, $code, $previous);
         $this->file = $file;
         $this->line = $line;
     }

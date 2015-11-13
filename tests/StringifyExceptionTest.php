@@ -8,6 +8,14 @@ class StringifyTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Kanti\StringifyException
      */
+    public function testStringifyException()
+    {
+        LJSON::stringify(new \Exception);
+    }
+
+    /**
+     * @expectedException \Kanti\StringifyException
+     */
     public function testConvertToInt()
     {
         LJSON::stringify(function ($a) {
@@ -164,7 +172,7 @@ class StringifyTest extends \PHPUnit_Framework_TestCase
      */
     public function testOldErrorHandler()
     {
-        LJSON::stringify(function ($a) {
+        LJSON::stringify(function () {
             $b = new \stdClass;
             return (int)$b;
         });

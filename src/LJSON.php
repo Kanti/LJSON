@@ -12,6 +12,9 @@ class LJSON
      */
     public static $errorHandlerSet = false;
 
+    /**
+     * @return void
+     */
     public static function restoreErrorHandler()
     {
         if (static::$errorHandlerSet) {
@@ -24,7 +27,7 @@ class LJSON
      * @param mixed $value
      * @param int $parameterCount
      * @return string
-     * @throws \Exception
+     * @throws \Kanti\StringifyException
      * @api
      * @example example/example1.php 15 1
      */
@@ -107,7 +110,7 @@ class LJSON
 
             return "(" . implode(',', array_keys($params)) . ") => (" . static::stringify($newValue, $parameterCount) . ")";
         }
-        throw new \Exception('type cannot be converted ', 1445505204);
+        throw new StringifyException('Type not supported ', __FILE__, __LINE__);
     }
 
     /**

@@ -104,7 +104,7 @@ class LJSONTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testParseLJson1()
+    public function testParseLJsonNullFunction()
     {
         $expectedFunction = function () {
             return null;
@@ -113,7 +113,7 @@ class LJSONTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedFunction(), $actualFunction());
     }
 
-    public function testParseLJson2()
+    public function testParseLJsonOneParameterFunction()
     {
         $expectedFunction = function ($param1) {
             return $param1;
@@ -124,7 +124,7 @@ class LJSONTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedFunction($this), $actualFunction($this));
     }
 
-    public function testParseLJson3()
+    public function testParseLJsonTowParameterAndArrayFunction()
     {
         $expectedFunction = function ($param1, $param2) {
             return [$param1, $param2];
@@ -135,7 +135,7 @@ class LJSONTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedFunction($this, []), $actualFunction($this, []));
     }
 
-    public function testParseLJson4()
+    public function testParseLJsonOver12ParameterAndArrayFunction()
     {
         $a = $b = $c = $d = $e = $f = $g = $h = $i = $j = $k = $l = 1337;
         $expectedFunction = function ($a, $b, $c, $d, $e, $f, $g, $h, $i, $j, $k, $l) {
@@ -148,10 +148,13 @@ class LJSONTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testParseLJson5()
+    public function testParseLJsonParameterAsFunctionFunction()
     {
         $a = function ($b = null) {
-            return 1;
+            if ($b === null) {
+                $b = 2;
+            }
+            return $b * $b;
         };
         $expectedFunction = function ($c) {
             return $c($c());
@@ -163,7 +166,7 @@ class LJSONTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testParseLJson6()
+    public function testParseLJsonParameterAsFunctionWith2ParameterFunction()
     {
         $a = function ($x, $y) {
             return [$x, $y];
@@ -178,7 +181,7 @@ class LJSONTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testParseLJson7()
+    public function testParseLJsonFunctionInFunctionReturnArrayFunction()
     {
         $expectedFunction = function ($a) {
             return function () use ($a) {
@@ -192,14 +195,6 @@ class LJSONTest extends \PHPUnit_Framework_TestCase
             $expectedFunction2(),
             $actualFunction2()
         );
-    }
-
-    /**
-     * @expectedException \Exception
-     */
-    public function testStringifyException()
-    {
-        LJSON::stringify(new \Exception);
     }
 
     /**

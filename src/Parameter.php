@@ -4,7 +4,6 @@ namespace Kanti;
 /**
  * Class Parameter
  *
- * @internal
  * @package Kanti
  */
 class Parameter implements \ArrayAccess, \IteratorAggregate, \Countable
@@ -17,6 +16,7 @@ class Parameter implements \ArrayAccess, \IteratorAggregate, \Countable
     /**
      * Parameter constructor.
      * @param $result
+     * @internal
      */
     public function __construct($result)
     {
@@ -189,6 +189,9 @@ class Parameter implements \ArrayAccess, \IteratorAggregate, \Countable
         throw new StringifyException('You can not unset an object attribute', $file, $line);
     }
 
+    /**
+     * @throws StringifyException
+     */
     public function getIterator()
     {
         $file = __FILE__;
@@ -202,6 +205,9 @@ class Parameter implements \ArrayAccess, \IteratorAggregate, \Countable
     }
 
 
+    /**
+     * @throws StringifyException
+     */
     public function __clone()
     {
         $file = __FILE__;
@@ -214,6 +220,9 @@ class Parameter implements \ArrayAccess, \IteratorAggregate, \Countable
         throw new StringifyException("You can not clone a parameter", $file, $line);
     }
 
+    /**
+     * @throws StringifyException
+     */
     public function count()
     {
         $file = __FILE__;
