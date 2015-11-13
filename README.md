@@ -44,13 +44,9 @@ echo \Kanti\LJSON::stringify($mail) . "\n";
 - <a href="https://github.com/MaiaVictor/LJSON#why" target="_blank">Why?</a>⇗
 - <a href="https://github.com/MaiaVictor/LJSON#using-primitives" target="_blank">Using primitives</a>⇗
 - <a href="https://github.com/MaiaVictor/LJSON#safety" target="_blank">Safety</a>⇗
-- [TODO](#todo)
 
 ## Installing
 
 ````batch
 composer require kanti/ljson
 ````
-
-## TODO
- - currently nothing

@@ -31,33 +31,33 @@ class LJSONTest extends \PHPUnit_Framework_TestCase
             "() => ([])" => function () {
                 return [];
             },
-            "(v0) => (v0)" => function ($a) {
-                return $a;
+            "(v0) => (v0)" => function ($aaa) {
+                return $aaa;
             },
-            "(v0) => ([v0,v0])" => function ($a) {
-                return [$a, $a];
+            "(v0) => ([v0,v0])" => function ($aaa) {
+                return [$aaa, $aaa];
             },
-            "(v0) => (v0(v0))" => function ($a) {
-                return $a($a);
+            "(v0) => (v0(v0))" => function ($aaa) {
+                return $aaa($aaa);
             },
-            "(v0) => (() => (v0))" => function ($a) {
-                return function () use ($a) {
-                    return $a;
+            "(v0) => (() => (v0))" => function ($aaa) {
+                return function () use ($aaa) {
+                    return $aaa;
                 };
             },
-            "(v0) => (() => (v0()))" => function ($a) {
-                return function () use ($a) {
-                    return $a();
+            "(v0) => (() => (v0()))" => function ($aaa) {
+                return function () use ($aaa) {
+                    return $aaa();
                 };
             },
-            "(v0) => ((v1,v2) => (v0(v1,v2)))" => function ($a) {
-                return function ($b, $c) use ($a) {
-                    return $a($b, $c);
+            "(v0) => ((v1,v2) => (v0(v1,v2)))" => function ($aaa) {
+                return function ($b, $c) use ($aaa) {
+                    return $aaa($b, $c);
                 };
             },
-            "(v0) => ([(v1,v2) => ([v0(v1,v2)])])" => function ($a) {
-                return [function ($b, $c) use ($a) {
-                    return [$a($b, $c)];
+            "(v0) => ([(v1,v2) => ([v0(v1,v2)])])" => function ($aaa) {
+                return [function ($bbb, $ccc) use ($aaa) {
+                    return [$aaa($bbb, $ccc)];
                 }];
             },
         ];
@@ -137,55 +137,55 @@ class LJSONTest extends \PHPUnit_Framework_TestCase
 
     public function testParseLJsonOver12ParameterAndArrayFunction()
     {
-        $a = $b = $c = $d = $e = $f = $g = $h = $i = $j = $k = $l = 1337;
-        $expectedFunction = function ($a, $b, $c, $d, $e, $f, $g, $h, $i, $j, $k, $l) {
-            return [$a, $b, $c, $d, $e, $f, $g, $h, $i, $j, $k, $l];
+        $aaa = $bbb = $ccc = $ddd = $eee = $fff = $ggg = $hhh = $iii = $jjj = $kkkk = $lll = 1337;
+        $expectedFunction = function ($aaa, $bbb, $ccc, $ddd, $eee, $fff, $ggg, $hhh, $iii, $jjj, $kkkk, $lll) {
+            return [$aaa, $bbb, $ccc, $ddd, $eee, $fff, $ggg, $hhh, $iii, $jjj, $kkkk, $lll];
         };
         $actualFunction = LJSON::parse(LJSON::stringify($expectedFunction));
         $this->assertEquals(
-            $expectedFunction($a, $b, $c, $d, $e, $f, $g, $h, $i, $j, $k, $l),
-            $actualFunction($a, $b, $c, $d, $e, $f, $g, $h, $i, $j, $k, $l)
+            $expectedFunction($aaa, $bbb, $ccc, $ddd, $eee, $fff, $ggg, $hhh, $iii, $jjj, $kkkk, $lll),
+            $actualFunction($aaa, $bbb, $ccc, $ddd, $eee, $fff, $ggg, $hhh, $iii, $jjj, $kkkk, $lll)
         );
     }
 
     public function testParseLJsonParameterAsFunctionFunction()
     {
-        $a = function ($b = null) {
-            if ($b === null) {
-                $b = 2;
+        $aaa = function ($bbb = null) {
+            if ($bbb === null) {
+                $bbb = 2;
             }
-            return $b * $b;
+            return $bbb * $bbb;
         };
-        $expectedFunction = function ($c) {
-            return $c($c());
+        $expectedFunction = function ($ccc) {
+            return $ccc($ccc());
         };
         $actualFunction = LJSON::parse(LJSON::stringify($expectedFunction));
         $this->assertEquals(
-            $expectedFunction($a),
-            $actualFunction($a)
+            $expectedFunction($aaa),
+            $actualFunction($aaa)
         );
     }
 
     public function testParseLJsonParameterAsFunctionWith2ParameterFunction()
     {
-        $a = function ($x, $y) {
-            return [$x, $y];
+        $aaa = function ($xxx, $yyy) {
+            return [$xxx, $yyy];
         };
-        $expectedFunction = function ($a) {
-            return $a($a, $a);
+        $expectedFunction = function ($aaa) {
+            return $aaa($aaa, $aaa);
         };
         $actualFunction = LJSON::parse(LJSON::stringify($expectedFunction));
         $this->assertEquals(
-            $expectedFunction($a),
-            $actualFunction($a)
+            $expectedFunction($aaa),
+            $actualFunction($aaa)
         );
     }
 
     public function testParseLJsonFunctionInFunctionReturnArrayFunction()
     {
-        $expectedFunction = function ($a) {
-            return function () use ($a) {
-                return [$a];
+        $expectedFunction = function ($aaa) {
+            return function () use ($aaa) {
+                return [$aaa];
             };
         };
         $actualFunction = LJSON::parse(LJSON::stringify($expectedFunction));

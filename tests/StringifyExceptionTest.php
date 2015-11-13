@@ -18,8 +18,8 @@ class StringifyTest extends \PHPUnit_Framework_TestCase
      */
     public function testConvertToInt()
     {
-        LJSON::stringify(function ($a) {
-            return (int)$a;
+        LJSON::stringify(function ($aaa) {
+            return (int)$aaa;
         });
     }
 
@@ -28,8 +28,8 @@ class StringifyTest extends \PHPUnit_Framework_TestCase
      */
     public function testConvertToFloat()
     {
-        LJSON::stringify(function ($a) {
-            return (float)$a;
+        LJSON::stringify(function ($aaa) {
+            return (float)$aaa;
         });
     }
 
@@ -38,8 +38,8 @@ class StringifyTest extends \PHPUnit_Framework_TestCase
      */
     public function testConvertToString()
     {
-        LJSON::stringify(function ($a) {
-            return (string)$a;
+        LJSON::stringify(function ($aaa) {
+            return (string)$aaa;
         });
     }
 
@@ -48,8 +48,8 @@ class StringifyTest extends \PHPUnit_Framework_TestCase
      */
     public function testArrayGet()
     {
-        LJSON::stringify(function ($a) {
-            return $a[1];
+        LJSON::stringify(function ($aaa) {
+            return $aaa[1];
         });
     }
 
@@ -58,8 +58,8 @@ class StringifyTest extends \PHPUnit_Framework_TestCase
      */
     public function testArraySet()
     {
-        LJSON::stringify(function ($a) {
-            $a[1] = 1;
+        LJSON::stringify(function ($aaa) {
+            $aaa[1] = 1;
         });
     }
 
@@ -68,8 +68,8 @@ class StringifyTest extends \PHPUnit_Framework_TestCase
      */
     public function testArrayIsset()
     {
-        LJSON::stringify(function ($a) {
-            return isset($a[1]);
+        LJSON::stringify(function ($aaa) {
+            return isset($aaa[1]);
         });
     }
 
@@ -78,8 +78,8 @@ class StringifyTest extends \PHPUnit_Framework_TestCase
      */
     public function testArrayUnset()
     {
-        LJSON::stringify(function ($a) {
-            unset($a[1]);
+        LJSON::stringify(function ($aaa) {
+            unset($aaa[1]);
         });
     }
 
@@ -89,8 +89,8 @@ class StringifyTest extends \PHPUnit_Framework_TestCase
      */
     public function testAttributeGet()
     {
-        LJSON::stringify(function ($a) {
-            return $a->b;
+        LJSON::stringify(function ($aaa) {
+            return $aaa->b;
         });
     }
 
@@ -99,8 +99,8 @@ class StringifyTest extends \PHPUnit_Framework_TestCase
      */
     public function testAttributeSet()
     {
-        LJSON::stringify(function ($a) {
-            $a->b = 1;
+        LJSON::stringify(function ($aaa) {
+            $aaa->b = 1;
         });
     }
 
@@ -109,8 +109,8 @@ class StringifyTest extends \PHPUnit_Framework_TestCase
      */
     public function testAttributeIsset()
     {
-        LJSON::stringify(function ($a) {
-            return isset($a->b);
+        LJSON::stringify(function ($aaa) {
+            return isset($aaa->bbb);
         });
     }
 
@@ -119,8 +119,8 @@ class StringifyTest extends \PHPUnit_Framework_TestCase
      */
     public function testAttributeUnset()
     {
-        LJSON::stringify(function ($a) {
-            unset($a->b);
+        LJSON::stringify(function ($aaa) {
+            unset($aaa->bbb);
         });
     }
 
@@ -129,8 +129,8 @@ class StringifyTest extends \PHPUnit_Framework_TestCase
      */
     public function testCallMethod()
     {
-        LJSON::stringify(function ($a) {
-            return $a->b();
+        LJSON::stringify(function ($aaa) {
+            return $aaa->bbb();
         });
     }
 
@@ -139,8 +139,8 @@ class StringifyTest extends \PHPUnit_Framework_TestCase
      */
     public function testIterator()
     {
-        LJSON::stringify(function ($a) {
-            foreach ($a as $item) {
+        LJSON::stringify(function ($aaa) {
+            foreach ($aaa as $item) {
                 return $item;
             }
             return null;
@@ -152,8 +152,8 @@ class StringifyTest extends \PHPUnit_Framework_TestCase
      */
     public function testClone()
     {
-        LJSON::stringify(function ($a) {
-            return clone $a;
+        LJSON::stringify(function ($aaa) {
+            return clone $aaa;
         });
     }
 
@@ -162,8 +162,8 @@ class StringifyTest extends \PHPUnit_Framework_TestCase
      */
     public function testCount()
     {
-        LJSON::stringify(function ($a) {
-            return count($a);
+        LJSON::stringify(function ($aaa) {
+            return count($aaa);
         });
     }
 
@@ -173,8 +173,8 @@ class StringifyTest extends \PHPUnit_Framework_TestCase
     public function testOldErrorHandler()
     {
         LJSON::stringify(function () {
-            $b = new \stdClass;
-            return (int)$b;
+            $object = new \stdClass;
+            return (int)$object;
         });
     }
 
@@ -188,8 +188,8 @@ class StringifyTest extends \PHPUnit_Framework_TestCase
             return;
         }
         set_error_handler(null);
-        LJSON::stringify(function ($b) {
-            return (float)$b;
+        LJSON::stringify(function ($aaa) {
+            return (float)$aaa;
         });
     }
 }

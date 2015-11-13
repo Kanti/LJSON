@@ -331,10 +331,10 @@ class LJSON
                         $result .= $escape[$json[$pos]];
                         $pos++;
                     }
-                } else {
-                    $result .= $json[$pos];
-                    $pos++;
+                    continue;
                 }
+                $result .= $json[$pos];
+                $pos++;
             }
             $pos++;
             return '"' . str_replace('"', '\"', $result) . '"';
