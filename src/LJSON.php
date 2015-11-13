@@ -97,7 +97,9 @@ class LJSON
                 $message = preg_replace(
                     "/Object of class Kanti\\\\Parameter could not be converted to (.*)/",
                     "Parameter's can not be converted (to $1)",
-                    $message, -1, $count
+                    $message,
+                    -1,
+                    $count
                 );
                 if ($count) {
                     throw new StringifyException($message, $filename, $lineNumber, $severity);
