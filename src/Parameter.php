@@ -1,8 +1,6 @@
 <?php
 namespace Kanti;
 
-use Traversable;
-
 /**
  * Class Parameter
  *
@@ -51,8 +49,7 @@ class Parameter implements \ArrayAccess, \IteratorAggregate, \Countable
     {
         $file = __FILE__;
         $line = __LINE__;
-        $e = new \Exception;
-        $trace = $e->getTrace();
+        $trace = (new \Exception)->getTrace();
         if (isset($trace[0])) {
             $file = $trace[0]['file'];
             $line = $trace[0]['line'];
@@ -69,8 +66,7 @@ class Parameter implements \ArrayAccess, \IteratorAggregate, \Countable
     {
         $file = __FILE__;
         $line = __LINE__;
-        $e = new \Exception;
-        $trace = $e->getTrace();
+        $trace = (new \Exception)->getTrace();
         if (isset($trace[0])) {
             $file = $trace[0]['file'];
             $line = $trace[0]['line'];
@@ -87,8 +83,7 @@ class Parameter implements \ArrayAccess, \IteratorAggregate, \Countable
     {
         $file = __FILE__;
         $line = __LINE__;
-        $e = new \Exception;
-        $trace = $e->getTrace();
+        $trace = (new \Exception)->getTrace();
         if (isset($trace[0])) {
             $file = $trace[0]['file'];
             $line = $trace[0]['line'];
@@ -105,8 +100,7 @@ class Parameter implements \ArrayAccess, \IteratorAggregate, \Countable
     {
         $file = __FILE__;
         $line = __LINE__;
-        $e = new \Exception;
-        $trace = $e->getTrace();
+        $trace = (new \Exception)->getTrace();
         if (isset($trace[0])) {
             $file = $trace[0]['file'];
             $line = $trace[0]['line'];
@@ -122,8 +116,7 @@ class Parameter implements \ArrayAccess, \IteratorAggregate, \Countable
     {
         $file = __FILE__;
         $line = __LINE__;
-        $e = new \Exception;
-        $trace = $e->getTrace();
+        $trace = (new \Exception)->getTrace();
         if (isset($trace[0])) {
             $file = $trace[0]['file'];
             $line = $trace[0]['line'];
@@ -139,8 +132,7 @@ class Parameter implements \ArrayAccess, \IteratorAggregate, \Countable
     {
         $file = __FILE__;
         $line = __LINE__;
-        $e = new \Exception;
-        $trace = $e->getTrace();
+        $trace = (new \Exception)->getTrace();
         if (isset($trace[0])) {
             $file = $trace[0]['file'];
             $line = $trace[0]['line'];
@@ -157,8 +149,7 @@ class Parameter implements \ArrayAccess, \IteratorAggregate, \Countable
     {
         $file = __FILE__;
         $line = __LINE__;
-        $e = new \Exception;
-        $trace = $e->getTrace();
+        $trace = (new \Exception)->getTrace();
         if (isset($trace[0])) {
             $file = $trace[0]['file'];
             $line = $trace[0]['line'];
@@ -174,8 +165,7 @@ class Parameter implements \ArrayAccess, \IteratorAggregate, \Countable
     {
         $file = __FILE__;
         $line = __LINE__;
-        $e = new \Exception;
-        $trace = $e->getTrace();
+        $trace = (new \Exception)->getTrace();
         if (isset($trace[0])) {
             $file = $trace[0]['file'];
             $line = $trace[0]['line'];
@@ -191,8 +181,7 @@ class Parameter implements \ArrayAccess, \IteratorAggregate, \Countable
     {
         $file = __FILE__;
         $line = __LINE__;
-        $e = new \Exception;
-        $trace = $e->getTrace();
+        $trace = (new \Exception)->getTrace();
         if (isset($trace[0])) {
             $file = $trace[0]['file'];
             $line = $trace[0]['line'];
@@ -204,8 +193,7 @@ class Parameter implements \ArrayAccess, \IteratorAggregate, \Countable
     {
         $file = __FILE__;
         $line = __LINE__;
-        $e = new \Exception;
-        $trace = $e->getTrace();
+        $trace = (new \Exception)->getTrace();
         if (isset($trace[0])) {
             $file = $trace[0]['file'];
             $line = $trace[0]['line'];
@@ -218,8 +206,7 @@ class Parameter implements \ArrayAccess, \IteratorAggregate, \Countable
     {
         $file = __FILE__;
         $line = __LINE__;
-        $e = new \Exception;
-        $trace = $e->getTrace();
+        $trace = (new \Exception)->getTrace();
         if (isset($trace[0])) {
             $file = $trace[0]['file'];
             $line = $trace[0]['line'];
@@ -231,8 +218,7 @@ class Parameter implements \ArrayAccess, \IteratorAggregate, \Countable
     {
         $file = __FILE__;
         $line = __LINE__;
-        $e = new \Exception;
-        $trace = $e->getTrace();
+        $trace = (new \Exception)->getTrace();
         if (isset($trace[1])) {
             $file = $trace[1]['file'];
             $line = $trace[1]['line'];
