@@ -94,7 +94,11 @@ class LJSON
             $oldEH = function () {
             };
             $oldEH = set_error_handler(function ($severity, $message, $filename, $lineNumber) use (&$oldEH) {
-                $message = preg_replace("/Object of class Kanti\\\\Parameter could not be converted to (.*)/", "Parameter's can not be converted (to $1)", $message, -1, $count);
+                $message = preg_replace(
+                    "/Object of class Kanti\\\\Parameter could not be converted to (.*)/",
+                    "Parameter's can not be converted (to $1)",
+                    $message, -1, $count
+                );
                 if ($count) {
                     throw new StringifyException($message, $filename, $lineNumber, $severity);
                 }
@@ -108,7 +112,8 @@ class LJSON
             $newValue = call_user_func_array($value, $params);
             LJSON::restoreErrorHandler();
 
-            return "(" . implode(',', array_keys($params)) . ") => (" . static::stringify($newValue, $parameterCount) . ")";
+            $value = static::stringify($newValue, $parameterCount);
+            return "(" . implode(',', array_keys($params)) . ") => (" . $value . ")";
         }
         throw new StringifyException('Type not supported ', __FILE__, __LINE__);
     }
@@ -294,7 +299,7 @@ class LJSON
                 if ($length > $pos && $json[$pos] == '+') {
                     $exponent .= $json[$pos];
                     $pos++;
-                } else if ($length > $pos && $json[$pos] == '-') {
+                } elseif ($length > $pos && $json[$pos] == '-') {
                     $exponent .= $json[$pos];
                     $pos++;
                 }

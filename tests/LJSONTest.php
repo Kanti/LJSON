@@ -51,8 +51,8 @@ class LJSONTest extends \PHPUnit_Framework_TestCase
                 };
             },
             "(v0) => ((v1,v2) => (v0(v1,v2)))" => function ($aaa) {
-                return function ($b, $c) use ($aaa) {
-                    return $aaa($b, $c);
+                return function ($bbb, $ccc) use ($aaa) {
+                    return $aaa($bbb, $ccc);
                 };
             },
             "(v0) => ([(v1,v2) => ([v0(v1,v2)])])" => function ($aaa) {
@@ -168,8 +168,8 @@ class LJSONTest extends \PHPUnit_Framework_TestCase
 
     public function testParseLJsonParameterAsFunctionWith2ParameterFunction()
     {
-        $aaa = function ($xxx, $yyy) {
-            return [$xxx, $yyy];
+        $aaa = function ($aaa, $bbb) {
+            return [$aaa, $bbb];
         };
         $expectedFunction = function ($aaa) {
             return $aaa($aaa, $aaa);

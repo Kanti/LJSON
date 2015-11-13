@@ -6,8 +6,11 @@ engines:
     checks:
       CleanCode/StaticAccess:
         enabled: false
+      CleanCode/BooleanArgumentFlag:
+        enabled: false
   fixme:
     enabled: true
 ratings:
   paths:
   - "src/**.php"
+  - "tests/**.php"
