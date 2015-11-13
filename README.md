@@ -53,5 +53,4 @@ composer require kanti/ljson
 ````
 
 ## TODO
- - Library support
- - standard Library
+ - currently nothing

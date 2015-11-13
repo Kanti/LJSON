@@ -171,11 +171,17 @@ class StringifyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \PHPUnit_Framework_Error_Notice
+     * @expectedException \Kanti\StringifyException
      */
-    public function testA()
+    public function testNoErrorHandlerPreset()
     {
-        $b = new \stdClass;
-        return (int)$b;
+        if (PHP_MAJOR_VERSION < 5 || (PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION < 5)) {
+            $this->markTestSkipped('only works for php >=5.5');
+            return;
+        }
+        set_error_handler(null);
+        LJSON::stringify(function ($b) {
+            return (float)$b;
+        });
     }
 }

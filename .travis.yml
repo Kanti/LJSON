@@ -10,8 +10,8 @@ matrix:
   fast_finish: true
   include:
     - php: 5.4
-      env: CODECLIMATE=yes
     - php: 5.5
+      env: CODECLIMATE=yes
     - php: 5.6
     - php: 7.0
     - php: hhvm

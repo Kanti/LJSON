@@ -8,9 +8,17 @@ namespace Kanti;
 class LJSON
 {
     /**
-     * @var callable|\Closure
+     * @var bool
      */
-    protected static $oldErrorHandler = null;
+    public static $errorHandlerSet = false;
+
+    public static function restoreErrorHandler()
+    {
+        if (static::$errorHandlerSet) {
+            static::$errorHandlerSet = false;
+            restore_error_handler();
+        }
+    }
 
     /**
      * @param mixed $value
@@ -47,7 +55,9 @@ class LJSON
             if ($value === []) {
                 return '[]';
             }
-            $value = array_map([__CLASS__, __FUNCTION__], $value);
+            foreach ($value as $key => $item) {
+                $value[$key] = static::stringify($item, $parameterCount);
+            }
             if (array_keys($value) !== range(0, count($value) - 1)) {//isAssoc
                 $result = '{';
                 foreach ($value as $key => $v) {
@@ -76,29 +86,24 @@ class LJSON
             }
             $parameterCount += count($params);
 
-            if (static::$oldErrorHandler === null) {
-                $oldEH = static::$oldErrorHandler = set_error_handler(function () {
-                });
-                set_error_handler(function ($severity, $message, $filename, $lineNumber) use ($oldEH) {
-                    $message = preg_replace('/Object of class Kanti\\\\Parameter could not be converted to (.*)/', "Parameter's can not be converted (to $1)", $message, -1, $count);
-                    if ($count) {
-                        throw new StringifyException($message, $filename, $lineNumber, $severity);
-                    }
-                    try {
-                        $oldEH($severity, $message, $filename, $lineNumber);
-                    } catch (\Exception $e) {
-                        throw $e;
-                    }
-                });
-            }
+
+            static::$errorHandlerSet = true;
+            $oldEH = function () {
+            };
+            $oldEH = set_error_handler(function ($severity, $message, $filename, $lineNumber) use (&$oldEH) {
+                $message = preg_replace("/Object of class Kanti\\\\Parameter could not be converted to (.*)/", "Parameter's can not be converted (to $1)", $message, -1, $count);
+                if ($count) {
+                    throw new StringifyException($message, $filename, $lineNumber, $severity);
+                }
+                try {
+                    $oldEH($severity, $message, $filename, $lineNumber);
+                } catch (\Exception $e) {
+                    LJSON::restoreErrorHandler();
+                    throw $e;
+                }
+            });
             $newValue = call_user_func_array($value, $params);
-            if (static::$oldErrorHandler === null) {
-                set_error_handler(function () {
-                });
-            } else {
-                set_error_handler(static::$oldErrorHandler);
-            }
-            static::$oldErrorHandler = null;
+            LJSON::restoreErrorHandler();
 
             return "(" . implode(',', array_keys($params)) . ") => (" . static::stringify($newValue, $parameterCount) . ")";
         }

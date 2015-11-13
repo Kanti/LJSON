@@ -53,8 +53,6 @@ class Parameter implements \ArrayAccess, \IteratorAggregate, \Countable
         $line = __LINE__;
         $e = new \Exception;
         $trace = $e->getTrace();
-        var_dump($trace);
-        die();
         if (isset($trace[0])) {
             $file = $trace[0]['file'];
             $line = $trace[0]['line'];
