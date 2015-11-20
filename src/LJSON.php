@@ -102,7 +102,7 @@ class LJSON
                     $count
                 );
                 if ($count) {
-                    throw new StringifyException($message, $filename, $lineNumber, $severity);
+                    throw new StringifyException($message, $filename, $lineNumber, 1448007982);
                 }
                 try {
                     $oldEH($severity, $message, $filename, $lineNumber);
@@ -117,7 +117,7 @@ class LJSON
             $value = static::stringify($newValue, $parameterCount);
             return "(" . implode(',', array_keys($params)) . ") => (" . $value . ")";
         }
-        throw new StringifyException('Type not supported ', __FILE__, __LINE__);
+        throw new StringifyException('Type not supported ', __FILE__, __LINE__, 1448007971);
     }
 
     /**

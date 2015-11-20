@@ -54,7 +54,7 @@ class Parameter implements \ArrayAccess, \IteratorAggregate, \Countable
             $file = $trace[0]['file'];
             $line = $trace[0]['line'];
         }
-        throw new StringifyException('You can not call a method of a parameter', $file, $line);
+        throw new StringifyException('You can not call a method of a parameter', $file, $line, 1448007822);
     }
 
     /**
@@ -71,7 +71,7 @@ class Parameter implements \ArrayAccess, \IteratorAggregate, \Countable
             $file = $trace[0]['file'];
             $line = $trace[0]['line'];
         }
-        throw new StringifyException('You can not test existence of an array element', $file, $line);
+        throw new StringifyException('You can not test existence of an array element', $file, $line, 1448007841);
     }
 
     /**
@@ -88,7 +88,7 @@ class Parameter implements \ArrayAccess, \IteratorAggregate, \Countable
             $file = $trace[0]['file'];
             $line = $trace[0]['line'];
         }
-        throw new StringifyException('You can not get an array element', $file, $line);
+        throw new StringifyException('You can not get an array element', $file, $line, 1448007850);
     }
 
     /**
@@ -105,7 +105,7 @@ class Parameter implements \ArrayAccess, \IteratorAggregate, \Countable
             $file = $trace[0]['file'];
             $line = $trace[0]['line'];
         }
-        throw new StringifyException('You can not set an array element', $file, $line);
+        throw new StringifyException('You can not set an array element', $file, $line, 1448007858);
     }
 
     /**
@@ -121,7 +121,7 @@ class Parameter implements \ArrayAccess, \IteratorAggregate, \Countable
             $file = $trace[0]['file'];
             $line = $trace[0]['line'];
         }
-        throw new StringifyException('You can not unset an array element', $file, $line);
+        throw new StringifyException('You can not unset an array element', $file, $line, 1448007871);
     }
 
     /**
@@ -137,7 +137,7 @@ class Parameter implements \ArrayAccess, \IteratorAggregate, \Countable
             $file = $trace[0]['file'];
             $line = $trace[0]['line'];
         }
-        throw new StringifyException('You can not get an object attribute', $file, $line);
+        throw new StringifyException('You can not get an object attribute', $file, $line, 1448007884);
     }
 
     /**
@@ -154,7 +154,7 @@ class Parameter implements \ArrayAccess, \IteratorAggregate, \Countable
             $file = $trace[0]['file'];
             $line = $trace[0]['line'];
         }
-        throw new StringifyException('You can not set an object attribute', $file, $line);
+        throw new StringifyException('You can not set an object attribute', $file, $line, 1448007894);
     }
 
     /**
@@ -170,7 +170,7 @@ class Parameter implements \ArrayAccess, \IteratorAggregate, \Countable
             $file = $trace[0]['file'];
             $line = $trace[0]['line'];
         }
-        throw new StringifyException('You can not test existence of an object attribute', $file, $line);
+        throw new StringifyException('You can not test existence of an object attribute', $file, $line, 1448007908);
     }
 
     /**
@@ -186,7 +186,7 @@ class Parameter implements \ArrayAccess, \IteratorAggregate, \Countable
             $file = $trace[0]['file'];
             $line = $trace[0]['line'];
         }
-        throw new StringifyException('You can not unset an object attribute', $file, $line);
+        throw new StringifyException('You can not unset an object attribute', $file, $line, 1448007923);
     }
 
     /**
@@ -201,7 +201,7 @@ class Parameter implements \ArrayAccess, \IteratorAggregate, \Countable
             $file = $trace[0]['file'];
             $line = $trace[0]['line'];
         }
-        throw new StringifyException("You can not iterate over a parameter", $file, $line);
+        throw new StringifyException("You can not iterate over a parameter", $file, $line, 1448007935);
     }
 
 
@@ -217,7 +217,7 @@ class Parameter implements \ArrayAccess, \IteratorAggregate, \Countable
             $file = $trace[0]['file'];
             $line = $trace[0]['line'];
         }
-        throw new StringifyException("You can not clone a parameter", $file, $line);
+        throw new StringifyException("You can not clone a parameter", $file, $line, 1448007948);
     }
 
     /**
@@ -232,6 +232,6 @@ class Parameter implements \ArrayAccess, \IteratorAggregate, \Countable
             $file = $trace[1]['file'];
             $line = $trace[1]['line'];
         }
-        throw new StringifyException("You can not count a parameter", $file, $line);
+        throw new StringifyException("You can not count a parameter", $file, $line, 1448007955);
     }
 }
