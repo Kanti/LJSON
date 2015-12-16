@@ -7,6 +7,7 @@ namespace Kanti;
  */
 class LJSON
 {
+    const RETURN_UNDEFINED_AS_SPECIAL_CLASS = 1073741824; // 2^30
     /**
      * @var bool
      */
@@ -44,6 +45,9 @@ class LJSON
             if (empty($value)) {
                 return '{}';
             }
+        }
+        if ($value instanceof SpecialUndefinedIdentifierClass) {
+            return 'undefined';
         }
         if (is_object($value) && in_array("JsonSerializable", class_implements($value))) {
             /**
@@ -191,16 +195,17 @@ class LJSON
     /**
      * @param string $ljson
      * @param bool|false $assoc
+     * @param int $options
      * @return string|bool|int|float|null|array|\stdClass|\Closure
      * @throws \Exception
      * @api
      * @example example/example1.php 16 1
      */
-    public static function parse($ljson, $assoc = false)
+    public static function parse($ljson, $assoc = false, $options = 0)
     {
         $pos = 0;
         static::skipSpace($ljson, $pos);
-        $resultCode = static::parseValue($ljson, $pos, $assoc);
+        $resultCode = static::parseValue($ljson, $pos, $assoc, [], $options);
         static::skipSpace($ljson, $pos);
         if ($pos == strlen($ljson) && $resultCode !== '') {
             return static::evaly($resultCode);
@@ -256,12 +261,23 @@ class LJSON
      * @param int $pos position in string
      * @param bool|false $assoc
      * @param array $variables
+     * @param int $options
      * @return string
      */
-    protected static function parseValue($json, &$pos, $assoc = false, $variables = [])
+    protected static function parseValue($json, &$pos, $assoc = false, $variables = [], $options = 0)
     {
         $length = strlen($json);
         $result = '';
+
+        //undefined
+        if (static::isWord($json, $pos, 'undefined')) {
+            $pos += 9;
+            if ($options & static::RETURN_UNDEFINED_AS_SPECIAL_CLASS) {
+                return 'new \Kanti\SPECIAL_UNDEFINED_CONSTANT';
+            }
+            return "null";
+        }
+
         //null
         if (static::isWord($json, $pos, 'null')) {
             $pos += 4;
@@ -357,7 +373,7 @@ class LJSON
             }
             do {
                 static::skipSpace($json, $pos);
-                $elements[] = static::parseValue($json, $pos, $assoc, $variables);
+                $elements[] = static::parseValue($json, $pos, $assoc, $variables, $options);
                 static::skipSpace($json, $pos);
             } while ($length > $pos && $json[$pos] == ',' && $pos++);
             static::skipSpace($json, $pos);
@@ -373,13 +389,13 @@ class LJSON
             $elements = [];
             do {
                 static::skipSpace($json, $pos);
-                $string = static::parseValue($json, $pos, $assoc, $variables);
+                $string = static::parseValue($json, $pos, $assoc, $variables, $options);
                 static::skipSpace($json, $pos);
                 if (is_string($string) && $length > $pos && $json[$pos] == ':') {
                     $pos++;
                     static::skipSpace($json, $pos);
 
-                    $elements[$string] = static::parseValue($json, $pos, $assoc, $variables);
+                    $elements[$string] = static::parseValue($json, $pos, $assoc, $variables, $options);
                     static::skipSpace($json, $pos);
                 }
             } while ($length > $pos && $json[$pos] == ',' && $pos++);
@@ -430,7 +446,7 @@ class LJSON
                     if ($length > $pos && $json[$pos] == '(') {
                         $pos++;
                         static::skipSpace($json, $pos);
-                        $body = static::parseValue($json, $pos, $assoc, $variables);
+                        $body = static::parseValue($json, $pos, $assoc, $variables, $options);
                         static::skipSpace($json, $pos);
                     }
                     if ($length > $pos && $json[$pos] == ')') {
@@ -470,7 +486,7 @@ class LJSON
                 }
                 do {
                     static::skipSpace($json, $pos);
-                    $elements[] = static::parseValue($json, $pos, $assoc, $variables);
+                    $elements[] = static::parseValue($json, $pos, $assoc, $variables, $options);
                     static::skipSpace($json, $pos);
                 } while ($length > $pos && $json[$pos] == ',' && $pos++);
                 static::skipSpace($json, $pos);
