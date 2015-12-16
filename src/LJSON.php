@@ -273,7 +273,7 @@ class LJSON
         if (static::isWord($json, $pos, 'undefined')) {
             $pos += 9;
             if ($options & static::RETURN_UNDEFINED_AS_SPECIAL_CLASS) {
-                return 'new \Kanti\SPECIAL_UNDEFINED_CONSTANT';
+                return 'new \Kanti\SpecialUndefinedIdentifierClass';
             }
             return "null";
         }

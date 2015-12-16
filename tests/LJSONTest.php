@@ -135,7 +135,7 @@ class LJSONTest extends \PHPUnit_Framework_TestCase
             return new SpecialUndefinedIdentifierClass;
         };
         $actualFunction = LJSON::parse(LJSON::stringify($expectedFunction), false, $options = LJSON::RETURN_UNDEFINED_AS_SPECIAL_CLASS);
-        $this->assertInstanceOf('Kanti\SPECIAL_UNDEFINED_CONSTANT', $actualFunction());
+        $this->assertInstanceOf('Kanti\SpecialUndefinedIdentifierClass', $actualFunction());
     }
 
     public function testParseLJsonOneParameterFunction()
