@@ -1,9 +1,9 @@
 <?php
-namespace Kanti\Test;
+namespace LJSON\Test;
 
-use Kanti\LJSON;
-use Kanti\SpecialUndefinedIdentifierClass;
-use Kanti\Test\Asset\Customer;
+use LJSON\LJSON;
+use LJSON\SpecialUndefinedIdentifierClass;
+use LJSON\Test\Asset\Customer;
 
 class LJSONTest extends \PHPUnit_Framework_TestCase
 {
@@ -135,7 +135,7 @@ class LJSONTest extends \PHPUnit_Framework_TestCase
             return new SpecialUndefinedIdentifierClass;
         };
         $actualFunction = LJSON::parse(LJSON::stringify($expectedFunction), false, $options = LJSON::RETURN_UNDEFINED_AS_SPECIAL_CLASS);
-        $this->assertInstanceOf('Kanti\SpecialUndefinedIdentifierClass', $actualFunction());
+        $this->assertInstanceOf('LJSON\SpecialUndefinedIdentifierClass', $actualFunction());
     }
 
     public function testParseLJsonOneParameterFunction()

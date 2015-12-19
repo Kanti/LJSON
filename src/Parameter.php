@@ -1,5 +1,5 @@
 <?php
-namespace Kanti;
+namespace LJSON;
 
 /**
  * Class Parameter

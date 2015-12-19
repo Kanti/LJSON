@@ -1,5 +1,5 @@
 <?php
-namespace Kanti;
+namespace LJSON;
 
 /**
  * Class LJSON
@@ -28,7 +28,7 @@ class LJSON
      * @param mixed $value
      * @param int $parameterCount
      * @return string
-     * @throws \Kanti\StringifyException
+     * @throws \LJSON\StringifyException
      * @api
      * @example example/example1.php 15 1
      */
