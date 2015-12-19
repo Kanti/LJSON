@@ -3,7 +3,7 @@ namespace LJSON;
 
 /**
  * Class StringifyException
- * @package Kanti
+ * @package LJSON
  */
 class StringifyException extends \Exception
 {

@@ -3,7 +3,7 @@ namespace LJSON;
 
 /**
  * Class LJSON
- * @package Kanti
+ * @package LJSON
  */
 class LJSON
 {
@@ -99,7 +99,7 @@ class LJSON
             };
             $oldEH = set_error_handler(function ($severity, $message, $filename, $lineNumber) use (&$oldEH) {
                 $message = preg_replace(
-                    "/Object of class Kanti\\\\Parameter could not be converted to (.*)/",
+                    "/Object of class LJSON\\\\Parameter could not be converted to (.*)/",
                     "Parameter's can not be converted (to $1)",
                     $message,
                     -1,
@@ -273,7 +273,7 @@ class LJSON
         if (static::isWord($json, $pos, 'undefined')) {
             $pos += 9;
             if ($options & static::RETURN_UNDEFINED_AS_SPECIAL_CLASS) {
-                return 'new \Kanti\SpecialUndefinedIdentifierClass';
+                return 'new \LJSON\SpecialUndefinedIdentifierClass';
             }
             return "null";
         }

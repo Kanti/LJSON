@@ -4,7 +4,7 @@ namespace LJSON;
 /**
  * Class Parameter
  *
- * @package Kanti
+ * @package LJSON
  */
 class Parameter implements \ArrayAccess, \IteratorAggregate, \Countable
 {
@@ -28,7 +28,7 @@ class Parameter implements \ArrayAccess, \IteratorAggregate, \Countable
      */
     public function __invoke()
     {
-        $parameters = implode(',', array_map(['\Kanti\LJSON', 'stringify'], func_get_args()));
+        $parameters = implode(',', array_map(['\LJSON\LJSON', 'stringify'], func_get_args()));
         return new self($this->result . '(' . $parameters . ')');
     }
 
