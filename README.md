@@ -24,13 +24,13 @@ $person = [
     },
 ];
 
-$personStr    = \Kanti\LJSON::stringify($person);
-$personVal    = \Kanti\LJSON::parse($personStr);
+$personStr    = \LJSON\LJSON::stringify($person);
+$personVal    = \LJSON\LJSON::parse($personStr);
 $mailFunction = $personVal->mail;
 $mail         = $mailFunction("hello");// would crash with json_encode
 
 echo $personStr . "\n";
-echo \Kanti\LJSON::stringify($mail) . "\n";
+echo \LJSON\LJSON::stringify($mail) . "\n";
 ````
 
 ### output:
@@ -48,5 +48,5 @@ echo \Kanti\LJSON::stringify($mail) . "\n";
 ## Installing
 
 ````batch
-composer require kanti/ljson
+composer require ljson/ljson
 ````
