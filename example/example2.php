@@ -9,7 +9,7 @@ $func = function () {
     return "World";
 };
 
-$ljsonString = \Kanti\LJSON::stringify($func);
+$ljsonString = \LJSON\LJSON::stringify($func);
 //Hello
 
 echo "\nsend to server -> " . $ljsonString . "\n";
@@ -20,7 +20,7 @@ echo "\nsend to server -> " . $ljsonString . "\n";
 /*
  * Server:
  */
-$functionFromClient = \Kanti\LJSON::parse($ljsonString);
+$functionFromClient = \LJSON\LJSON::parse($ljsonString);
 echo $functionFromClient();
 //World
 

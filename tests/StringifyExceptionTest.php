@@ -1,12 +1,12 @@
 <?php
-namespace Kanti\Test;
+namespace LJSON\Test;
 
-use Kanti\LJSON;
+use LJSON\LJSON;
 
 class StringifyTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @expectedException \Kanti\StringifyException
+     * @expectedException \LJSON\StringifyException
      */
     public function testStringifyException()
     {
@@ -14,7 +14,7 @@ class StringifyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Kanti\StringifyException
+     * @expectedException \LJSON\StringifyException
      */
     public function testConvertToInt()
     {
@@ -24,7 +24,7 @@ class StringifyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Kanti\StringifyException
+     * @expectedException \LJSON\StringifyException
      */
     public function testConvertToFloat()
     {
@@ -34,7 +34,7 @@ class StringifyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Kanti\StringifyException
+     * @expectedException \LJSON\StringifyException
      */
     public function testConvertToString()
     {
@@ -44,7 +44,7 @@ class StringifyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Kanti\StringifyException
+     * @expectedException \LJSON\StringifyException
      */
     public function testArrayGet()
     {
@@ -54,7 +54,7 @@ class StringifyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Kanti\StringifyException
+     * @expectedException \LJSON\StringifyException
      */
     public function testArraySet()
     {
@@ -64,7 +64,7 @@ class StringifyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Kanti\StringifyException
+     * @expectedException \LJSON\StringifyException
      */
     public function testArrayIsset()
     {
@@ -74,7 +74,7 @@ class StringifyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Kanti\StringifyException
+     * @expectedException \LJSON\StringifyException
      */
     public function testArrayUnset()
     {
@@ -85,7 +85,7 @@ class StringifyTest extends \PHPUnit_Framework_TestCase
 
 
     /**
-     * @expectedException \Kanti\StringifyException
+     * @expectedException \LJSON\StringifyException
      */
     public function testAttributeGet()
     {
@@ -95,7 +95,7 @@ class StringifyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Kanti\StringifyException
+     * @expectedException \LJSON\StringifyException
      */
     public function testAttributeSet()
     {
@@ -105,7 +105,7 @@ class StringifyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Kanti\StringifyException
+     * @expectedException \LJSON\StringifyException
      */
     public function testAttributeIsset()
     {
@@ -115,7 +115,7 @@ class StringifyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Kanti\StringifyException
+     * @expectedException \LJSON\StringifyException
      */
     public function testAttributeUnset()
     {
@@ -125,7 +125,7 @@ class StringifyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Kanti\StringifyException
+     * @expectedException \LJSON\StringifyException
      */
     public function testCallMethod()
     {
@@ -135,7 +135,7 @@ class StringifyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Kanti\StringifyException
+     * @expectedException \LJSON\StringifyException
      */
     public function testIterator()
     {
@@ -148,7 +148,7 @@ class StringifyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Kanti\StringifyException
+     * @expectedException \LJSON\StringifyException
      */
     public function testClone()
     {
@@ -158,7 +158,7 @@ class StringifyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Kanti\StringifyException
+     * @expectedException \LJSON\StringifyException
      */
     public function testCount()
     {
@@ -179,7 +179,7 @@ class StringifyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Kanti\StringifyException
+     * @expectedException \LJSON\StringifyException
      */
     public function testNoErrorHandlerPreset()
     {

@@ -1,7 +1,7 @@
 <?php
-namespace Kanti\Test;
+namespace LJSON\Test;
 
-use Kanti\LJSON;
+use LJSON\LJSON;
 
 class LibraryTest extends \PHPUnit_Framework_TestCase
 {

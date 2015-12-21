@@ -1,5 +1,5 @@
 <?php
-namespace Kanti\Test\Asset;
+namespace LJSON\Test\Asset;
 
 class Customer implements \JsonSerializable
 {

@@ -1,5 +1,5 @@
 {
-    "name": "kanti/ljson",
+    "name": "ljson/ljson",
     "description": "JSON extended with pure functions. in PHP",
     "license": "MIT",
     "authors": [
@@ -17,12 +17,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Kanti\\": "src"
+            "LJSON\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Kanti\\Test\\": "tests"
+            "LJSON\\Test\\": "tests"
         }
     },
     "require": {

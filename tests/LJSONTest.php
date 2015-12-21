@@ -1,8 +1,9 @@
 <?php
-namespace Kanti\Test;
+namespace LJSON\Test;
 
-use Kanti\LJSON;
-use Kanti\Test\Asset\Customer;
+use LJSON\LJSON;
+use LJSON\SpecialUndefinedIdentifierClass;
+use LJSON\Test\Asset\Customer;
 
 class LJSONTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,7 +27,11 @@ class LJSONTest extends \PHPUnit_Framework_TestCase
             new Customer('hallo', 'git@kanti.de'),
         ];
         $this->testDataLJson = [
+            "() => (undefined)" => function () {
+                return new SpecialUndefinedIdentifierClass;
+            },
             "() => (null)" => function () {
+                return null;
             },
             "() => ([])" => function () {
                 return [];
@@ -56,9 +61,11 @@ class LJSONTest extends \PHPUnit_Framework_TestCase
                 };
             },
             "(v0) => ([(v1,v2) => ([v0(v1,v2)])])" => function ($aaa) {
-                return [function ($bbb, $ccc) use ($aaa) {
-                    return [$aaa($bbb, $ccc)];
-                }];
+                return [
+                    function ($bbb, $ccc) use ($aaa) {
+                        return [$aaa($bbb, $ccc)];
+                    }
+                ];
             },
         ];
     }
@@ -111,6 +118,24 @@ class LJSONTest extends \PHPUnit_Framework_TestCase
         };
         $actualFunction = LJSON::parse(LJSON::stringify($expectedFunction));
         $this->assertEquals($expectedFunction(), $actualFunction());
+    }
+
+    public function testParseLJsonUndefinedFunction()
+    {
+        $expectedFunction = function () {
+            return new SpecialUndefinedIdentifierClass;
+        };
+        $actualFunction = LJSON::parse(LJSON::stringify($expectedFunction));
+        $this->assertEquals(null, $actualFunction());
+    }
+
+    public function testParseLJsonUndefinedAsSpecialClassFunction()
+    {
+        $expectedFunction = function () {
+            return new SpecialUndefinedIdentifierClass;
+        };
+        $actualFunction = LJSON::parse(LJSON::stringify($expectedFunction), false, $options = LJSON::RETURN_UNDEFINED_AS_SPECIAL_CLASS);
+        $this->assertInstanceOf('LJSON\SpecialUndefinedIdentifierClass', $actualFunction());
     }
 
     public function testParseLJsonOneParameterFunction()
