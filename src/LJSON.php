@@ -412,7 +412,6 @@ class LJSON
                 }
                 return $result;
             }
-
         }
         //function
         if ($length > $pos && $json[$pos] == '(') {
@@ -433,7 +432,6 @@ class LJSON
                     }
                     $parameters[] = $parameter;
                 }
-
             } while ($length > $pos && $json[$pos] == ',' && $pos++);
             $variables += $parameters;
             if ($length > $pos && $json[$pos] == ')') {
