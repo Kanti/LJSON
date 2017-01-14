@@ -30,6 +30,7 @@ script:
   - ./vendor/bin/phpcpd ./src ./tests ./example -n
   - >
     if [[ "$CODECLIMATE" == "yes" ]]; then
+      composer require codeclimate/php-test-reporter:dev-master --dev --no-interaction
       CODECLIMATE_REPO_TOKEN=a84b61ed5cca760894732b4b9e61dc15d584c89abd4c696dc78ca78e429b1207 ./vendor/bin/test-reporter
     fi
 
@@ -38,3 +39,4 @@ script:
 notifications:
     on_success: never
     on_failure: always
+
