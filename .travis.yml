@@ -1,6 +1,6 @@
 # Required to run your project under the correct environment.
 language: php
-
+dist: trusty
 
 # allow_failures: Allow this build to fail under the specified environments.
 # fast_finish: If your build fails do not continue trying to build, just stop.
@@ -33,10 +33,3 @@ script:
       composer require codeclimate/php-test-reporter:dev-master --dev --no-interaction
       CODECLIMATE_REPO_TOKEN=a84b61ed5cca760894732b4b9e61dc15d584c89abd4c696dc78ca78e429b1207 ./vendor/bin/test-reporter
     fi
-
-
-# Customize when the notification emails are sent.
-notifications:
-    on_success: never
-    on_failure: always
-
